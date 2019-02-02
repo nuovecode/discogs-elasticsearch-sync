@@ -1,0 +1,22 @@
+{
+  "name": "discgsdatapump",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sync discogs catalog to elastic search",
+  "author": "Irene Iaccio",
+  "license": "MIT",
+  "main": "server.js",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "commander": "^2.19.0",
+    "elasticsearch": "^15.3.1",
+    "elasticsearch-deletebyquery": "^1.6.0",
+    "express": "^4.16.1",
+    "get-json": "^1.0.1"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "import": "node src/import.js"
+  },
+  "devDependencies": {}
+}
