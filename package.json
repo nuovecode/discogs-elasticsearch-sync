@@ -16,8 +16,9 @@
     "node-fetch": "^2.3.0"
   },
   "scripts": {
-    "start": "node src/server.js",
-    "import": "node src/import.js"
+    "sync": "node data/sync.js",
+    "info":  "node data/info.js",
+    "clean": "node data/clean.js"
   },
   "devDependencies": {}
 }

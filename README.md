@@ -1,20 +1,47 @@
-# Discogs to elastic
+# Sync Discogs user catalog in elastic Search
 
 ### Run elastic and kibana
 
 `docker-compose up --force-recreate`
 
+# App
+
+### Config
+
+```
+{
+  "user": {
+    "name": "<NAME>",
+    "token": "<TOKEN>"
+  },
+  "elasticsearch": {
+    "httpAuth": "",
+    "host": "http://localhost:9200/",
+    "index": "discogs_catalog"
+  }
+}
+```
+
 ### Commands
 
-`node data/setup.js`
+##### Sync 
 
-`node data/delete.js`
+`npm run sync`
 
-`node data/info.js`
+##### Clean 
 
-Docs
+Clean index defined in config:
 
-[Elastic doc](https://www.elastic.co/)
-[Elastic + node](https://www.compose.com/articles/getting-started-with-elasticsearch-and-node/)
+`npm run clean`
 
+Clean custom index:
 
+`npm run clean --index=<INDEX_NAME>`
+
+##### Info 
+
+`npm run info`
+
+### TODO
+
+- Autentication

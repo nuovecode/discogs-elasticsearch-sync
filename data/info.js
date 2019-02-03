@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const client = require('./connection.js');
 const chalk =  require('chalk');
 

@@ -1,8 +1,9 @@
 const elasticsearch = require('elasticsearch');
+const config = require('../config.json')
 
 let client = new elasticsearch.Client( {
   hosts: [
-    'http://localhost:9200/'
+    config.elasticsearch.host
   ]
 });
 
