@@ -12,7 +12,8 @@
     "elasticsearch": "^15.3.1",
     "elasticsearch-deletebyquery": "^1.6.0",
     "express": "^4.16.1",
-    "get-json": "^1.0.1"
+    "get-json": "^1.0.1",
+    "node-fetch": "^2.3.0"
   },
   "scripts": {
     "start": "node src/server.js",

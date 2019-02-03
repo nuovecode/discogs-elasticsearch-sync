@@ -1,4 +1,4 @@
-let elasticsearch = require('elasticsearch');
+const elasticsearch = require('elasticsearch');
 
 let client = new elasticsearch.Client( {
   hosts: [
