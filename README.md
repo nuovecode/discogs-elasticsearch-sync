@@ -45,3 +45,4 @@ Clean custom index:
 ### TODO
 
 - Autentication
+- Sync single item
