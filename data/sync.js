@@ -3,7 +3,7 @@ const chalk =  require('chalk')
 const fetch = require('node-fetch')
 const config = require('../config.json')
 
-let page = 1, bulk = []
+let page = 1
 createIndex(config.elasticsearch.index)
 
 function createIndex(index) {
@@ -24,10 +24,11 @@ function createIndex(index) {
 }
 
 function makebulk(items, callback) {
+  let bulk = []
   for(const item of items) {
     bulk.push({ index: { _index: config.elasticsearch.index, _type: 'for_sale', _id: item.id } }, item);
   }
-  callback(bulk);
+  callback(bulk)
 }
 
 function populateIndex (resp, callback) {
@@ -39,7 +40,7 @@ function populateIndex (resp, callback) {
     if (error) {
        console.log(chalk.red(status))
     } else {
-      callback(resp.items);
+      callback(resp.items)
     }
   });
 }
@@ -55,8 +56,13 @@ function fetchItems(index, page) {
             for(const item of items) {
               console.log(chalk.green(item.index.status) + ' ' + item.index._id)
             }
-          });
-        });
+          })
+        })
+        if(resp.pagination.page < resp.pagination.pages) {
+          setTimeout(() => {
+            fetchItems(index, page + 1)
+          }, 5000)
+        }
       }
     }).catch(error =>{
       console.log(chalk.red(error))
