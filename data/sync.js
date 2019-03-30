@@ -3,8 +3,8 @@ const chalk =  require('chalk')
 const fetch = require('node-fetch')
 const config = require('../config.json')
 
+let page = 1, bulk = []
 createIndex(config.elasticsearch.index)
-let page = 1
 
 function createIndex(index) {
   console.log(chalk.blue('Create ' + index + '..'))
@@ -23,40 +23,43 @@ function createIndex(index) {
   })
 }
 
+function makebulk(items, callback) {
+  for(const item of items) {
+    bulk.push({ index: { _index: config.elasticsearch.index, _type: 'for_sale', _id: item.id } }, item);
+  }
+  callback(bulk);
+}
+
+function populateIndex (resp, callback) {
+  client.bulk({
+    maxRetries: 5,
+    index: config.elasticsearch.index,
+    body: resp
+  }, (error, resp, status) => {
+    if (error) {
+       console.log(chalk.red(status))
+    } else {
+      callback(resp.items);
+    }
+  });
+}
+
+
 function fetchItems(index, page) {
-    fetch('https://api.discogs.com/users/' + config.user.name + '/inventory?status=for sale&page='+ page.toString() +'&per_page=5&token=' + config.user.token).then(response => {
+    fetch('https://api.discogs.com/users/' + config.user.name + '/inventory?status=for sale&page='+ page.toString() +'&per_page=100&token=' + config.user.token).then(response => {
       return response.json();
     }).then(resp => {
       if (resp.listings) {
-        console.log(chalk.blue('Import ' + index + '['+ page +']..'))
-        resp.listings.forEach((record) => {
-          populateIndex(index, record)
-        })
-        if (resp.pagination.pages > page) {
-          setTimeout(() => {
-            fetchItems(index, page + 1)
-          }, 0)
-        } else {
-          console.log(resp.pagination.items + ' items imported')
-        }
+        makebulk(resp.listings, resp => {
+          populateIndex(resp, items => {
+            for(const item of items) {
+              console.log(chalk.green(item.index.status) + ' ' + item.index._id)
+            }
+          });
+        });
       }
     }).catch(error =>{
       console.log(chalk.red(error))
     })
-}
-
-function populateIndex (index, record) {
-  client.index({
-    index: index,
-    id: record.id,
-    type: 'records',
-    body: record
-  },(err,item,status)=> {
-    if(status === 200) {
-      console.log(chalk.green(status) + ' id: ' + record.id)
-    } else {
-      console.log(chalk.red(status) + ' id: ' + record.id)
-    }
-  })
 }
 
