@@ -13,7 +13,7 @@
     "elasticsearch-deletebyquery": "^1.6.0",
     "express": "^4.16.1",
     "get-json": "^1.0.1",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^3.1.1"
   },
   "scripts": {
     "sync": "node data/sync.js",
